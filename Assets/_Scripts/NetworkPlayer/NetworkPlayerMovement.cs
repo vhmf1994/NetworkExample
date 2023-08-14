@@ -2,94 +2,51 @@ using Sirenix.OdinInspector;
 using Unity.Netcode;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
+[DisallowMultipleComponent]
 public class NetworkPlayerMovement : NetworkBehaviour
 {
-    [Title("Components")]
-    [SerializeField, ReadOnly] private Rigidbody rb;
+    [SerializeField, ReadOnly] private Vector3 movementVector;
+    [SerializeField, ReadOnly] private Vector3 movementInput;
 
-    [Title("Movement Configuration")]
-    [SerializeField, Range(1f, 10f)] float moveSpeed = 5.0f;
-    [SerializeField, Range(5f, 90f)] float rotationSpeed = 10.0f;
-    [SerializeField, Range(3f, 15f)] float jumpForce = 7.0f;
-    [SerializeField, Range(0.1f, 0.5f)] float groundRaycastDistance = 0.2f;
-
-    [SerializeField, ReadOnly] private Vector3 movement;
-
-    [SerializeField, ReadOnly] private bool isGrounded;
+    [SerializeField] private float movementSpeed = 4f;
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
 
-        rb = GetComponent<Rigidbody>();
+        if (!IsOwner)
+            enabled = false;
     }
 
     private void Update()
     {
-        if (!IsLocalPlayer) return;
-
-        HandleInputVectors();
+        HandleInput();
     }
 
     private void FixedUpdate()
     {
-        if (!IsLocalPlayer) return;
+        HandleMovement();
 
-        HandleIsGrounded();
-        HandlerMovement();
-        HandleRotation();
-        HandleJump();
-
-        ApplyForces();
+        transform.position = movementVector;
     }
 
-    private void ApplyForces()
+    private void HandleInput()
     {
-        // Aplica a gravidade manualmente
-        if (!isGrounded)
-        {
-            Vector3 gravity = Physics.gravity;
-            rb.AddForce(gravity, ForceMode.Acceleration);
-        }
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+
+        movementInput = new Vector3(horizontal, 0, vertical);
+    }
+    private void HandleMovement()
+    {
+        movementVector += Time.deltaTime * movementSpeed * movementInput;
     }
 
-    private void HandleInputVectors()
+    [ServerRpc]
+    private void OnMovementVectorValueChangedServerRpc(Vector3 previous, Vector3 current)
     {
-        // Movimento horizontal
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        float verticalInput = Input.GetAxisRaw("Vertical");
+        Debug.Log($"Detected NetworkVariable Change: Previous: {previous} | Current: {current}");
 
-        movement = new Vector3(horizontalInput, 0.0f, verticalInput).normalized * moveSpeed * Time.deltaTime;
-    }
-
-    private void HandlerMovement()
-    {
-        rb.MovePosition(rb.position + movement);
-    }
-
-    private void HandleRotation()
-    {
-        // Rotação
-        if (movement != Vector3.zero)
-        {
-            Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
-            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
-        }
-    }
-
-    private void HandleJump()
-    {
-        // Pulo
-        if (isGrounded && Input.GetButtonDown("Jump"))
-        {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        }
-    }
-
-    private void HandleIsGrounded()
-    {
-        // Verifica se o jogador está no chão
-        isGrounded = Physics.Raycast(transform.position + (transform.up * 0.1f), Vector3.down, groundRaycastDistance);
+        transform.position = current;
     }
 }
