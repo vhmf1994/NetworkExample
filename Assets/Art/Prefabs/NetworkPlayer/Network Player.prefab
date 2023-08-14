@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1423235059407355374}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3603406634067232834}
-  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2796158419446390398
 MeshFilter:
@@ -108,13 +108,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4934639067420252361}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1.375, z: 0.5}
   m_LocalScale: {x: 0.75, y: 0.25, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3603406634067232834}
-  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3447937805924696840
 MeshFilter:
@@ -178,9 +178,9 @@ GameObject:
   - component: {fileID: 2161678755867539247}
   - component: {fileID: -6907431816670889243}
   - component: {fileID: 2895548742367616270}
-  - component: {fileID: 4740362253018716188}
+  - component: {fileID: -3178100447532904595}
   m_Layer: 0
-  m_Name: NetworkPlayerDataPrefab
+  m_Name: Network Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -193,6 +193,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6658799394241758512}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -201,7 +202,6 @@ Transform:
   - {fileID: 6923113512551667897}
   - {fileID: 1356541908479699179}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &2161678755867539247
 BoxCollider:
@@ -260,7 +260,7 @@ MonoBehaviour:
   SyncPositionY: 0
   SyncPositionZ: 1
   SyncRotAngleX: 0
-  SyncRotAngleY: 0
+  SyncRotAngleY: 1
   SyncRotAngleZ: 0
   SyncScaleX: 0
   SyncScaleY: 0
@@ -273,8 +273,8 @@ MonoBehaviour:
   UseHalfFloatPrecision: 0
   InLocalSpace: 0
   Interpolate: 1
-  SlerpPosition: 0
---- !u!114 &4740362253018716188
+  SlerpPosition: 1
+--- !u!114 &-3178100447532904595
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -283,10 +283,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6658799394241758512}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b17baba8f2c46b4badc9f6bb458b962, type: 3}
+  m_Script: {fileID: 11500000, guid: efcbc20699dd2d143a16e97936403326, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementVector:
+  movementDirection:
     m_InternalValue: {x: 0, y: 0, z: 0}
-  movementInput: {x: 0, y: 0, z: 0}
-  movementSpeed: 4
+  movementSpeed: 7
+  rotationSpeed: 15
