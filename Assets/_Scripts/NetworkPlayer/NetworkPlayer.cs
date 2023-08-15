@@ -18,13 +18,12 @@ public class NetworkPlayer : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-
-        if (!IsOwner)
-            enabled = false;
     }
 
     private void Update()
     {
+        if (!IsOwner) return;
+
         HandleMovementInput();
     }
 
